@@ -18,6 +18,7 @@ describe("PhlPacComplaints", function() {
     it("houses configuration settings", function () {
       expect(phlPacComplaints.settings.apiHost).to.eql('http://gis.phila.gov');
       expect(phlPacComplaints.settings.apiPathBase).to.eql('/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query');
+      expect(phlPacComplaints.settings.fields).to.eql(['objectid', 'age', 'race', 'sex', 'type', 'date', 'unit', 'action', 'status', 'long_', 'lat']);
     });
 
     it("can be overridden on instantiation", function () {
