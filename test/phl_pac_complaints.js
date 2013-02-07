@@ -1,0 +1,61 @@
+var expect = require('expect.js');
+var nock = require('nock');
+var modulePath = '../lib/phl_pac_complaints';
+
+describe("PhlPacComplaints", function() {
+  var PhlPacComplaints = require(modulePath);
+  var phlPacComplaints = new PhlPacComplaints();
+
+  it("exists", function () {
+    expect(typeof PhlPacComplaints).to.eql('function');
+  });
+
+  describe("#settings", function () {
+    it("exists as an object on a PhlPacComplaints instance", function () {
+      expect(typeof phlPacComplaints.settings).to.eql('object');
+    });
+
+    it("houses configuration settings", function () {
+      expect(phlPacComplaints.settings.apiHost).to.eql('http://gis.phila.gov');
+      expect(phlPacComplaints.settings.apiPathBase).to.eql('/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query');
+    });
+
+    it("can be overridden on instantiation", function () {
+      var phlPacInst = new PhlPacComplaints({
+        apiHost: 'http://fakehost.com',
+        apiPathBase: '/fake/path'
+      });
+
+      expect(phlPacInst.settings.apiHost).to.eql('http://fakehost.com');
+      expect(phlPacInst.settings.apiPathBase).to.eql('/fake/path');
+    });
+  });
+
+  describe("#getData", function () {
+    it("exists as a method on a PhlPacComplaints instance", function () {
+      expect(typeof phlPacComplaints.getData).to.eql('function');
+    });
+    
+    it("makes an API call to the URL it is passed endpoint", function (done) {
+      nock('http://gis.phila.gov')
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=FOO=%27Bar%27&f=json")
+        .reply(200, {resp: 'fakeResponse'});
+
+      phlPacComplaints.getData({foo: 'bar'}, function(err, data) {
+        expect(data).to.eql({resp: 'fakeResponse'});
+        done();
+      });
+    });
+
+    it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
+      nock("http://gis.phila.gov")
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=FOO=%27Bar%27&f=json")
+        .reply(500, {resp: 'fake500Response'});
+
+      phlPacComplaints.getData({foo: 'bar'}, function(err, data) {
+        expect(data).to.eql({resp: 'fake500Response'});
+        done();
+      });
+    });
+  });
+});
