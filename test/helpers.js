@@ -37,11 +37,31 @@ describe("helpers", function() {
       expect(typeof helpers.constructWhereField).to.eql('function');
     });
 
-    it("returns the properly formatted string value of the where='' part of an API request", function () {
-      expect(helpers.constructWhereField({
-        foo: 'bar',
-        baz: 'bim'
-      })).to.eql("FOO='Bar'+and+BAZ='Bim'");
+    describe("when the object it is passed contains relevant and permitted 'where' field properties", function () {
+      it("returns the properly formatted string value of the where='' part of an API request", function () {
+        expect(helpers.constructWhereField({
+          objectid: 'someObjectId',
+          race: 'someRace',
+          age: 'someAge',
+          sex: 'someSex',
+          type: 'someType',
+          date: 'someDate',
+          unit: 'someUnit',
+          action: 'someAction',
+          status: 'someStatus',
+          long_: 'someLong',
+          lat: 'someLat'
+        })).to.eql("OBJECTID='SomeObjectId'+and+RACE='SomeRace'+and+AGE='SomeAge'+and+SEX='SomeSex'+and+TYPE='SomeType'+and+DATE='SomeDate'+and+UNIT='SomeUnit'+and+ACTION='SomeAction'+and+STATUS='SomeStatus'+and+LONG_='SomeLong'+and+LAT='SomeLat'");
+      });
+    });
+
+    describe("when the object it is passed contains relevant and permitted 'where' field properties, as well as not-permitted where field properties", function () {
+      it("returns the properly formatted string value of the where='' part of an API request", function () {
+        expect(helpers.constructWhereField({
+          objectid: 'someObjectId',
+          prohibitedField: 'valueShouldNotAppear'
+        })).to.eql("OBJECTID='SomeObjectId'");
+      });
     });
   });
 
@@ -54,7 +74,7 @@ describe("helpers", function() {
       expect(helpers.constructReqParams({
         foo: 'bar',
         baz: 'bim'
-      }).where).to.eql("FOO='Bar'+and+BAZ='Bim'");
+      }).where).to.eql("");
 
       expect(helpers.constructReqParams({
         foo: 'bar',
