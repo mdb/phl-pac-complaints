@@ -18,7 +18,7 @@ describe("PhlPacComplaints", function() {
     it("houses configuration settings", function () {
       expect(phlPacComplaints.settings.apiHost).to.eql('http://gis.phila.gov');
       expect(phlPacComplaints.settings.apiPathBase).to.eql('/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query');
-      expect(phlPacComplaints.settings.fields).to.eql(['objectid', 'age', 'race', 'sex', 'type', 'date', 'unit', 'action', 'status', 'long_', 'lat']);
+      expect(phlPacComplaints.settings.fields).to.eql(['objectid', 'age', 'race', 'sex', 'type', 'date', 'unit', 'action', 'status', 'long_', 'lat', 'shape']);
     });
 
     it("can be overridden on instantiation", function () {
@@ -32,9 +32,9 @@ describe("PhlPacComplaints", function() {
     });
   });
 
-  describe("#getData", function () {
+  describe("#get", function () {
     it("exists as a method on a PhlPacComplaints instance", function () {
-      expect(typeof phlPacComplaints.getData).to.eql('function');
+      expect(typeof phlPacComplaints.get).to.eql('function');
     });
 
     describe("when it is passed a query object whose properties are not allowed", function () {
@@ -43,7 +43,7 @@ describe("PhlPacComplaints", function() {
           .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=&f=json")
           .reply(200, {resp: 'fakeResponse'});
 
-        phlPacComplaints.getData({foo: 'bar'}, function(err, data) {
+        phlPacComplaints.get({foo: 'bar'}, function(err, data) {
           expect(data).to.eql({resp: 'fakeResponse'});
           done();
         });
@@ -56,7 +56,7 @@ describe("PhlPacComplaints", function() {
           .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=RACE=%27White%27&f=json")
           .reply(200, {resp: 'fakeResponse'});
 
-        phlPacComplaints.getData({race: 'white'}, function(err, data) {
+        phlPacComplaints.get({race: 'white'}, function(err, data) {
           expect(data).to.eql({resp: 'fakeResponse'});
           done();
         });
@@ -67,7 +67,7 @@ describe("PhlPacComplaints", function() {
           .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=RACE=%27White%27&f=json")
           .reply(500, {resp: 'fake500Response'});
 
-        phlPacComplaints.getData({race: 'white'}, function(err, data) {
+        phlPacComplaints.get({race: 'white'}, function(err, data) {
           expect(data).to.eql({resp: 'fake500Response'});
           done();
         });
