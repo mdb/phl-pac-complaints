@@ -86,7 +86,7 @@ describe("helpers", function() {
     });
 
     it("returns the properly formatted and encoded outFields string if it is passed an array", function () {
-      expect(helpers.getOutFields(['someField', 'anotherField'])).to.eql('outFields=SOMEFIELD%2C%20ANOTHERFIELD');
+      expect(helpers.getOutFields(['someField', 'anotherField'])).to.eql('outFields=someField,+anotherField');
     });
   });
 
@@ -116,7 +116,7 @@ describe("helpers", function() {
 
       expect(helpers.buildReqParamsString({
         outFields: ['bar', 'baz']
-      })).to.eql("outFields=BAR%2C%20BAZ&f=json");
+      })).to.eql("outFields=bar,+baz&f=json");
     });
   });
 });
