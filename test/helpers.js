@@ -81,8 +81,12 @@ describe("helpers", function() {
   });
 
   describe("#getOutFields", function () {
-    it("returns a string specifying the desired out fields that should be present in the JSON response and formatted as is required by the API", function () {
-      expect(helpers.getOutFields(['foo', 'bar'])).to.eql('FOO,+BAR');
+    it("returns the string it is passed if it is passed a string", function () {
+      expect(helpers.getOutFields('some string')).to.eql('some string');
+    });
+
+    it("returns the properly formatted and encoded outFields string if it is passed an array", function () {
+      expect(helpers.getOutFields(['someField', 'anotherField'])).to.eql('SOMEFIELD%2C%20ANOTHERFIELD');
     });
   });
 
