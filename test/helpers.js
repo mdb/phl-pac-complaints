@@ -86,21 +86,23 @@ describe("helpers", function() {
     });
   });
 
-  describe("#constructReqParams", function () {
+  describe("#buildReqParamsString", function () {
     it("exists", function () {
-      expect(typeof helpers.constructReqParams).to.eql('function');
+      expect(typeof helpers.buildReqParamsString).to.eql('function');
+    });
+
+    it("adds an 'f=json' paramater", function () {
+      expect(helpers.buildReqParamsString({
+        foo: 'bar',
+        baz: 'bim'
+      })).to.contain("f=json");
     });
 
     it("returns the properly formatted request params object", function () {
-      expect(helpers.constructReqParams({
+      expect(helpers.buildReqParamsString({
         foo: 'bar',
         baz: 'bim'
-      }).where).to.eql("");
-
-      expect(helpers.constructReqParams({
-        foo: 'bar',
-        baz: 'bim'
-      }).f).to.eql("json");
+      })).to.eql("foo=bar&baz=bim&f=json");
     });
   });
 });

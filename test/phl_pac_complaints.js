@@ -37,41 +37,26 @@ describe("PhlPacComplaints", function() {
       expect(typeof phlPacComplaints.get).to.eql('function');
     });
 
-    describe("when it is passed a query object whose properties are not allowed", function () {
-      it("makes an API call to the proper endpoint, without appending the irrelevant params object properties to the where field", function (done) {
-        nock('http://gis.phila.gov')
-          .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=&f=json")
-          .reply(200, {resp: 'fakeResponse'});
+    it("makes an API call to the proper endpoint, appending the object it's passed as a request params string", function (done) {
+      nock('http://gis.phila.gov')
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&f=json")
+        .reply(200, {resp: 'fakeResponse'});
 
-        phlPacComplaints.get({foo: 'bar'}, function(err, data) {
-          expect(data).to.eql({resp: 'fakeResponse'});
-          done();
-        });
+      phlPacComplaints.get({foo: 'bar'}, function(err, data) {
+        expect(data).to.eql({resp: 'fakeResponse'});
+        done();
       });
-    });   
+    });
+  });   
 
-    describe("when it is passed a query object whose properties are allowed", function () {
-      it("makes an API call to the proper endpoint, appending the relevant params object properties to the where field", function (done) {
-        nock('http://gis.phila.gov')
-          .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=RACE=%27White%27&f=json")
-          .reply(200, {resp: 'fakeResponse'});
+  it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
+    nock("http://gis.phila.gov")
+      .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&f=json")
+      .reply(500, {resp: 'fake500Response'});
 
-        phlPacComplaints.get({race: 'white'}, function(err, data) {
-          expect(data).to.eql({resp: 'fakeResponse'});
-          done();
-        });
-      });
-
-      it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
-        nock("http://gis.phila.gov")
-          .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?where=RACE=%27White%27&f=json")
-          .reply(500, {resp: 'fake500Response'});
-
-        phlPacComplaints.get({race: 'white'}, function(err, data) {
-          expect(data).to.eql({resp: 'fake500Response'});
-          done();
-        });
-      });
+    phlPacComplaints.get({foo: 'bar'}, function(err, data) {
+      expect(data).to.eql({resp: 'fake500Response'});
+      done();
     });
   });
 });
