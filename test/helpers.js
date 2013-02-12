@@ -81,12 +81,12 @@ describe("helpers", function() {
   });
 
   describe("#getOutFields", function () {
-    it("returns the string it is passed if it is passed a string", function () {
-      expect(helpers.getOutFields('some string')).to.eql('some string');
+    it("returns the URI-encoded version of the string it is passed if it is passed a string", function () {
+      expect(helpers.getOutFields('some string')).to.eql('outFields=some%20string');
     });
 
     it("returns the properly formatted and encoded outFields string if it is passed an array", function () {
-      expect(helpers.getOutFields(['someField', 'anotherField'])).to.eql('SOMEFIELD%2C%20ANOTHERFIELD');
+      expect(helpers.getOutFields(['someField', 'anotherField'])).to.eql('outFields=SOMEFIELD%2C%20ANOTHERFIELD');
     });
   });
 
@@ -107,6 +107,16 @@ describe("helpers", function() {
         foo: 'bar',
         baz: 'bim'
       })).to.eql("foo=bar&baz=bim&f=json");
+    });
+
+    it("builds the proper outFields query string if an outFields property is present on the params object", function () {
+      expect(helpers.buildReqParamsString({
+        outFields: 'bar'
+      })).to.eql("outFields=bar&f=json");      
+
+      expect(helpers.buildReqParamsString({
+        outFields: ['bar', 'baz']
+      })).to.eql("outFields=BAR%2C%20BAZ&f=json");
     });
   });
 });
