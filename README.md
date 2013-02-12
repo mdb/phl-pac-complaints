@@ -8,10 +8,10 @@ Learn more about Philadelphia's PAC Complaints data on [OpenDataPhilly](http://o
 
 ## Example Usage
 
-    var Phl = require('phl_pac_complaints.js');
-    var phl = new Phl();
+    var PhlPacComplaints = require('phl_pac_complaints');
+    var phlPacComplaints = new PhlPacComplaints();
 
-    phl.getData({action: 'reject'}, function (error, data) {
+    phlPacComplaints.get({where: "ACTION='Reject'"}, function (error, data) {
         if (error) return error;
         console.log(data);
     });
