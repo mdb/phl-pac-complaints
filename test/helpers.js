@@ -2,64 +2,6 @@ var expect = require('expect.js');
 var helpers = require('../lib/helpers');
 
 describe("helpers", function() {
-  describe("#initalCap", function () {
-    it("exists", function () {
-      expect(typeof helpers.initialCap).to.eql('function');
-    });
-
-    it("returns the string it is passed with the first letter capitalized", function () {
-      expect(helpers.initialCap('string')).to.eql('String');
-    });
-  });
-
-  describe("#constructWhereField", function () {
-    it("exists", function () {
-      expect(typeof helpers.constructWhereField).to.eql('function');
-    });
-
-    describe("when the object it is passed contain property attributes specified in the 'permitables' array", function () {
-      it("returns the properly formatted string value of the where='' part of an API request", function () {
-        var permitables = ['objectid', 'race', 'age', 'sex', 'type', 'date', 'unit', 'action', 'status', 'long_', 'lat'];
-
-        expect(helpers.constructWhereField({
-          objectid: 'someObjectId',
-          race: 'someRace',
-          age: 'someAge',
-          sex: 'someSex',
-          type: 'someType',
-          date: 'someDate',
-          unit: 'someUnit',
-          action: 'someAction',
-          status: 'someStatus',
-          long_: 'someLong',
-          lat: 'someLat'
-        }, permitables)).to.eql("OBJECTID='SomeObjectId'+and+RACE='SomeRace'+and+AGE='SomeAge'+and+SEX='SomeSex'+and+TYPE='SomeType'+and+DATE='SomeDate'+and+UNIT='SomeUnit'+and+ACTION='SomeAction'+and+STATUS='SomeStatus'+and+LONG_='SomeLong'+and+LAT='SomeLat'");
-      });
-    });
-
-    describe("when the object it is passed does not contain property attributes contained in the 'permitables' array", function () {
-      it("returns the properly formatted string value of the where='' part of an API request", function () {
-        var permitables = ['foo'];
-
-        expect(helpers.constructWhereField({
-          objectid: 'someObjectId',
-          prohibitedField: 'valueShouldNotAppear'
-        }, permitables)).to.eql("");
-      });
-    });
-
-    describe("when the object it is passed contains contains both permitted and not-permitted property attributes, as specified by the 'permitables' array", function () {
-      it("returns the properly formatted string value of the where='' part of an API request", function () {
-        var permitables = ['foo', 'bar'];
-
-        expect(helpers.constructWhereField({
-          foo: 'fooValue',
-          unPermitted: 'unPermittedValue'
-        }, permitables)).to.eql("FOO='FooValue'");
-      });
-    });
-  });
-
   describe("#getOutFields", function () {
     it("returns the URI-encoded version of the string it is passed if it is passed a string", function () {
       expect(helpers.getOutFields('some string')).to.eql('outFields=some%20string');
