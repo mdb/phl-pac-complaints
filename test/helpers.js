@@ -2,26 +2,6 @@ var expect = require('expect.js');
 var helpers = require('../lib/helpers');
 
 describe("helpers", function() {
-  describe("#applyDefaults", function () {
-    it("it applies default properties to an object", function () {
-      expect(helpers.applyDefaults({}, {
-        a: 1,
-        b: 2
-      })).to.eql({a: 1, b: 2});
-    });
-
-    it("overrides default properties with specified new values", function () {
-      expect(helpers.applyDefaults({
-        a: 'a',
-        b: 'b'
-      }, {
-        a: 1,
-        b: 2,
-        c: 3
-      })).to.eql({a: 'a', b: 'b', c: 3});
-    });
-  });
-
   describe("#initalCap", function () {
     it("exists", function () {
       expect(typeof helpers.initialCap).to.eql('function');
