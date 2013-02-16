@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mdb/phl-pac-complaints.png?branch=master)](https://travis-ci.org/mdb/phl-pac-complaints)
+
 # phl-pac-complaints
 
 A thin Node.js client for working with Philadelphia's [Police Advisory Commission Complaints API](http://gis.phila.gov/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer).
