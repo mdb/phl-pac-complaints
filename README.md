@@ -14,6 +14,6 @@ Learn more about Philadelphia's PAC Complaints data on [OpenDataPhilly](http://o
     var phlPacComplaints = new PhlPacComplaints();
 
     phlPacComplaints.get({where: "ACTION='Reject'"}, function (error, data) {
-        if (error) return error;
-        console.log(data);
+      if (error) return error;
+      console.log(data);
     });
