@@ -66,16 +66,16 @@ describe("PhlPacComplaints", function() {
         done();
       });
     });
-  });   
 
-  it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
-    nock("http://gis.phila.gov")
-      .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outputSpatialReference=&outFields=*&f=json")
-      .reply(500, {resp: 'fake500Response'});
+    it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
+      nock("http://gis.phila.gov")
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outputSpatialReference=&outFields=*&f=json")
+        .reply(500, {resp: 'fake500Response'});
 
-    phlPacComplaints.get({foo: 'bar'}, function(err, data) {
-      expect(data).to.eql({resp: 'fake500Response'});
-      done();
+      phlPacComplaints.get({foo: 'bar'}, function(err, data) {
+        expect(data).to.eql({resp: 'fake500Response'});
+        done();
+      });
     });
   });
 });
