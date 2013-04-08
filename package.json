@@ -1,7 +1,7 @@
 {
   "name": "phl-pac-complaints",
   "description": "A Node.js module for working with City of Philadelphia's Police Advisory Commision Complaints Data.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://github.com/mdb/phl-pac-complaints",
   "author": "Mike Ball",
   "main": "lib/phl_pac_complaints",
