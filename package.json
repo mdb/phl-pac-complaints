@@ -16,7 +16,7 @@
   "dependencies": {
     "request": "*",
     "underscore": "1.4.4",
-    "archaeologist": "0.0.2"
+    "archaeologist": "0.0.3"
   },
   "devDependencies": {
     "mocha": "*",

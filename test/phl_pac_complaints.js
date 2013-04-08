@@ -39,7 +39,7 @@ describe("PhlPacComplaints", function() {
 
     it("makes an API call to the proper endpoint, appending the object it's passed as a request params string, and also including default result options if none are specified", function (done) {
       nock('http://gis.phila.gov')
-        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outputSpatialReference=&outFields=*&f=json")
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&outSR=4326&outFields=*&f=json")
         .reply(200, {resp: 'fakeResponse'});
 
       phlPacComplaints.get({foo: 'bar'}, function(err, data) {
@@ -50,7 +50,7 @@ describe("PhlPacComplaints", function() {
 
     it("makes an API call to the proper endpoint, appending the object it's passed as a request params string, and also including defaults-overriding result options if they are present in the object", function (done) {
       nock('http://gis.phila.gov')
-        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=true&returnIdsOnly=true&returnGeometry=false&maxAllowableOffset=blah&outputSpatialReference=blah&outFields=foo,+bar&f=json")
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=true&returnIdsOnly=true&returnGeometry=false&maxAllowableOffset=blah&outSR=blah&outFields=foo,+bar&f=json")
         .reply(200, {resp: 'fakeResponse'});
 
       phlPacComplaints.get({
@@ -59,7 +59,7 @@ describe("PhlPacComplaints", function() {
         returnIdsOnly: true,
         returnGeometry: false,
         maxAllowableOffset: 'blah',
-        outputSpatialReference: 'blah',
+        outSR: 'blah',
         outFields: ['foo', 'bar']
       }, function(err, data) {
         expect(data).to.eql({resp: 'fakeResponse'});
@@ -69,7 +69,7 @@ describe("PhlPacComplaints", function() {
 
     it("continues to work as designed, even if the API responds with an error code of 500", function (done) {
       nock("http://gis.phila.gov")
-        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outputSpatialReference=&outFields=*&f=json")
+        .get("/ArcGIS/rest/services/PhilaGov/PAC_Complaints_2009_2012/MapServer/0/query?foo=bar&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&outSR=4326&outFields=*&f=json")
         .reply(500, {resp: 'fake500Response'});
 
       phlPacComplaints.get({foo: 'bar'}, function(err, data) {
